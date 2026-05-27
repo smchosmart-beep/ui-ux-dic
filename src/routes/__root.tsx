@@ -72,11 +72,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "바이브 코더 UI/UX 사전 — AI와 정확하게 대화하기" },
+      { name: "description", content: "비전공 기획자를 위한 UI/UX 필수 용어 사전. 45개 용어를 실제 미니 데모로 직접 보여줍니다." },
+      { name: "author", content: "Vibe Coder Dict" },
+      { property: "og:title", content: "바이브 코더 UI/UX 사전" },
+      { property: "og:description", content: "AI에게 정확한 용어로 요청하세요. 45개 UI 컴포넌트를 직접 그려서 설명합니다." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <HeadContent />
       </head>
