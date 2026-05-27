@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   Menu, ChevronRight, ChevronDown, ChevronLeft, Home, Search, Bell, Check, X,
-  Plus, Loader2, Calendar, AlertCircle, MoreHorizontal, Heart, Star, Settings,
+  Plus, Loader2, AlertCircle, Heart, Star, Settings,
   CheckCircle2, Inbox, ArrowRight, MoreVertical, Folder, FileText, User,
 } from "lucide-react";
 
