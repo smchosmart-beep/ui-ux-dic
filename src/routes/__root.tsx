@@ -75,11 +75,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "바이브 코더 UI/UX 사전 — AI와 정확하게 대화하기" },
       { name: "description", content: "비전공 기획자를 위한 UI/UX 필수 용어 사전. 45개 용어를 실제 미니 데모로 직접 보여줍니다." },
       { name: "author", content: "Vibe Coder Dict" },
-      { property: "og:title", content: "바이브 코더 UI/UX 사전" },
-      { property: "og:description", content: "AI에게 정확한 용어로 요청하세요. 45개 UI 컴포넌트를 직접 그려서 설명합니다." },
+      { property: "og:title", content: "바이브 코더 UI/UX 사전 — AI와 정확하게 대화하기" },
+      { property: "og:description", content: "비전공 기획자를 위한 UI/UX 필수 용어 사전. 45개 용어를 실제 미니 데모로 직접 보여줍니다." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "바이브 코더 UI/UX 사전 — AI와 정확하게 대화하기" },
+      { name: "twitter:description", content: "비전공 기획자를 위한 UI/UX 필수 용어 사전. 45개 용어를 실제 미니 데모로 직접 보여줍니다." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c14fb45f-4f8a-4185-999c-2e748e5200d2/id-preview-c5e50787--d3dd248f-f059-4576-b9a0-e0e5b5d4bf1b.lovable.app-1779861461163.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c14fb45f-4f8a-4185-999c-2e748e5200d2/id-preview-c5e50787--d3dd248f-f059-4576-b9a0-e0e5b5d4bf1b.lovable.app-1779861461163.png" },
     ],
     links: [
       {
