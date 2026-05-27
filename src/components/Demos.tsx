@@ -502,7 +502,7 @@ const Table = () => (
 const List = () => (
   <Box>
     <div className="w-full bg-white rounded-md shadow-sm divide-y divide-slate-100 text-xs">
-      {[[Folder,"디자인 자료"],[FileText,"기획서 v2"],[User,"새 멤버 초대"]].map(([Ic,t],i) => (
+      {([[Folder,"디자인 자료"],[FileText,"기획서 v2"],[User,"새 멤버 초대"]] as const).map(([Ic,t],i) => (
         <div key={i} className="flex items-center gap-2 px-2.5 py-2">
           <Ic className="w-3.5 h-3.5 text-mint-500" /><span>{t}</span>
           <ChevronRight className="w-3 h-3 text-slate-300 ml-auto" />
