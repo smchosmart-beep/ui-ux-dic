@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, SearchX, Sparkles, X } from "lucide-react";
+import { ArrowRight, Search, X } from "lucide-react";
 import { TERMS, CATEGORIES, type Category } from "../data/terms";
 import { Demo } from "../components/Demos";
 
@@ -8,13 +8,25 @@ export const Route = createFileRoute("/")({
   component: Page,
 });
 
+/* Anthropic radial spike-mark (4-spoke asterisk) */
+function SpikeMark({ className = "w-5 h-5", fill = "currentColor" }: { className?: string; fill?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <path
+        fill={fill}
+        d="M12 1.5c.5 4.2 1.7 6.6 3.6 7.9 1.9 1.3 4.3 1.8 6.9 1.6v2c-2.6-.2-5 .3-6.9 1.6-1.9 1.3-3.1 3.7-3.6 7.9-.5-4.2-1.7-6.6-3.6-7.9-1.9-1.3-4.3-1.8-6.9-1.6v-2c2.6.2 5-.3 6.9-1.6C10.3 8.1 11.5 5.7 12 1.5Z"
+      />
+    </svg>
+  );
+}
+
 function Page() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<Category | "전체">("전체");
 
   const filtered = useMemo(() => {
     const kw = q.trim().toLowerCase();
-    return TERMS.filter(t => {
+    return TERMS.filter((t) => {
       if (cat !== "전체" && t.category !== cat) return false;
       if (!kw) return true;
       return t.name.toLowerCase().includes(kw) || t.description.toLowerCase().includes(kw);
@@ -23,68 +35,133 @@ function Page() {
 
   const counts = useMemo(() => {
     const m: Record<string, number> = { 전체: TERMS.length };
-    CATEGORIES.forEach(c => { m[c] = TERMS.filter(t => t.category === c).length; });
+    CATEGORIES.forEach((c) => {
+      m[c] = TERMS.filter((t) => t.category === c).length;
+    });
     return m;
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Hero */}
-      <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-mint-50 via-white to-white pointer-events-none" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-mint-200/40 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-mint-100/60 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative max-w-6xl mx-auto px-5 sm:px-8 pt-16 pb-12 sm:pt-24 sm:pb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white shadow-sm rounded-full text-xs font-semibold text-mint-700">
-            <Sparkles className="w-3.5 h-3.5" /> 바이브 코더를 위한 시각 사전
-          </div>
-          <h1 className="mt-5 text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
-            바이브 코더<br className="sm:hidden" />
-            <span className="text-mint-600"> UI/UX 사전</span>
-          </h1>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
-            AI에게 "그거 있잖아…" 말고, 정확한 용어로 요청하세요.
-            45개의 핵심 UI를 글이 아닌 <span className="font-semibold text-slate-900">실제 미니 화면</span>으로 보여드립니다.
-          </p>
-
-          <div className="mt-8 max-w-xl relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              value={q}
-              onChange={e => setQ(e.target.value)}
-              placeholder="용어 검색 (예: 토글, 모달, 페이지네이션…)"
-              className="w-full bg-white shadow-md rounded-2xl pl-11 pr-11 py-4 text-sm outline-none focus:ring-4 focus:ring-mint-500/20 transition-all placeholder:text-slate-400"
-              aria-label="용어 검색"
-            />
-            {q && (
-              <button onClick={() => setQ("")} aria-label="검색어 지우기"
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded-full bg-slate-100 hover:bg-slate-200 transition-all active:scale-95">
-                <X className="w-3.5 h-3.5 text-slate-500" />
-              </button>
-            )}
-          </div>
+    <div className="min-h-screen bg-background text-ink">
+      {/* Top Navigation */}
+      <header className="sticky top-0 z-30 bg-[#faf9f5]/90 backdrop-blur-md">
+        <div className="max-w-[1200px] mx-auto h-16 px-6 sm:px-10 flex items-center justify-between">
+          <a href="#top" className="flex items-center gap-2 text-ink">
+            <SpikeMark className="w-5 h-5" fill="#141413" />
+            <span className="font-serif text-xl tracking-tight">Vibe UI/UX Dict</span>
+          </a>
+          <nav className="hidden md:flex items-center gap-7 text-sm text-mute">
+            <a href="#dictionary" className="hover:text-ink transition-colors">Dictionary</a>
+            <a href="#cta" className="hover:text-ink transition-colors">About</a>
+          </nav>
+          <a
+            href="#dictionary"
+            className="inline-flex items-center gap-1.5 h-10 px-5 rounded-md bg-coral text-white text-sm font-medium hover:bg-coral-active transition-colors"
+          >
+            Try it
+          </a>
         </div>
       </header>
 
-      {/* Filter */}
-      <nav className="sticky top-0 z-20 bg-background/85 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-3">
-          <div className="flex gap-2 overflow-x-auto scrollbar-none -mx-1 px-1">
-            {(["전체", ...CATEGORIES] as const).map(c => {
+      {/* Hero Band */}
+      <section id="top" className="bg-canvas">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 pt-20 pb-24 grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+          <div>
+            <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-mute font-medium">
+              <span className="w-6 h-px bg-mute" /> A dictionary for vibe coders
+            </span>
+            <h1 className="mt-6 font-serif text-[44px] sm:text-[56px] lg:text-[68px] leading-[1.04] tracking-[-0.025em] text-ink">
+              AI에게 정확히<br />말하는 법.
+            </h1>
+            <p className="mt-6 text-[17px] leading-relaxed text-body max-w-xl">
+              "그거 있잖아…" 대신 정확한 용어로 요청하세요.
+              45개의 핵심 UI/UX를 글이 아닌 <span className="text-ink font-medium">실제 미니 화면</span>으로 보여드립니다.
+            </p>
+            <div className="mt-10 flex items-center gap-5">
+              <a
+                href="#dictionary"
+                className="inline-flex items-center gap-2 h-12 px-6 rounded-md bg-coral text-white text-[15px] font-medium hover:bg-coral-active transition-colors"
+              >
+                사전 열기 <ArrowRight className="w-4 h-4" />
+              </a>
+              <a href="#cta" className="text-[15px] text-coral hover:text-coral-active transition-colors">
+                왜 만들었나요? →
+              </a>
+            </div>
+          </div>
+
+          {/* Dark code-window hero card */}
+          <div className="rounded-xl bg-surface-dark text-on-dark overflow-hidden">
+            <div className="flex items-center gap-2 px-5 py-3 bg-surface-dark-elev">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
+              <span className="ml-3 text-xs text-on-dark-soft font-mono">prompt.txt</span>
+            </div>
+            <pre className="px-6 py-6 text-[13.5px] leading-[1.7] font-mono text-on-dark overflow-x-auto">
+              <span className="text-on-dark-soft"># 모호한 요청</span>
+              {"\n"}
+              <span className="text-[#e8a55a]">User:</span> 위에 뜨는 알림 같은 거 만들어줘
+              {"\n\n"}
+              <span className="text-on-dark-soft"># 정확한 요청</span>
+              {"\n"}
+              <span className="text-[#5db8a6]">User:</span> 우측 상단에 <span className="text-coral">Toast</span> 컴포넌트를
+              {"\n        "}3초간 표시하고 자동으로 닫아줘.
+              {"\n\n"}
+              <span className="text-[#e8a55a]">AI:</span> 정확히 그렇게 만들어 드릴게요. ✓
+            </pre>
+          </div>
+        </div>
+      </section>
+
+      {/* Search + Filter */}
+      <section id="dictionary" className="border-t border-hairline bg-canvas">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-10">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div>
+              <span className="text-xs uppercase tracking-[0.15em] text-mute font-medium">Dictionary</span>
+              <h2 className="mt-2 font-serif text-[32px] sm:text-[40px] tracking-[-0.02em] text-ink leading-[1.1]">
+                45개 용어, 6개 카테고리.
+              </h2>
+            </div>
+
+            <div className="relative w-full lg:w-[360px]">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-mute" />
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="용어 검색 (예: 토글, 모달…)"
+                aria-label="용어 검색"
+                className="w-full h-11 pl-10 pr-10 rounded-md bg-canvas border border-hairline text-[15px] text-ink placeholder:text-mute-soft outline-none focus:border-coral focus:ring-2 focus:ring-coral/15 transition-all"
+              />
+              {q && (
+                <button
+                  onClick={() => setQ("")}
+                  aria-label="검색어 지우기"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center rounded-md hover:bg-surface-card transition-colors"
+                >
+                  <X className="w-3.5 h-3.5 text-mute" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Category tabs */}
+          <div className="mt-8 flex gap-1 overflow-x-auto -mx-1 px-1">
+            {(["전체", ...CATEGORIES] as const).map((c) => {
               const active = cat === c;
               return (
                 <button
                   key={c}
                   onClick={() => setCat(c)}
-                  className={`shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all active:scale-95 ${
+                  className={`shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-md text-sm font-medium transition-colors ${
                     active
-                      ? "bg-mint-500 text-white shadow-md shadow-mint-500/20"
-                      : "bg-white text-slate-600 shadow-sm hover:-translate-y-0.5 hover:shadow-md"
+                      ? "bg-surface-card text-ink"
+                      : "text-mute hover:text-ink hover:bg-surface-soft"
                   }`}
                 >
                   {c}
-                  <span className={`ml-1.5 ${active ? "text-white/80" : "text-slate-400"}`}>
+                  <span className={`text-xs ${active ? "text-coral" : "text-mute-soft"}`}>
                     {counts[c]}
                   </span>
                 </button>
@@ -92,54 +169,90 @@ function Page() {
             })}
           </div>
         </div>
-      </nav>
+      </section>
 
-      {/* Grid */}
-      <main className="max-w-6xl mx-auto px-5 sm:px-8 pb-24 pt-4">
-        {filtered.length === 0 ? (
-          <div className="bg-white rounded-3xl shadow-sm p-12 text-center my-8">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-mint-50 grid place-items-center">
-              <SearchX className="w-7 h-7 text-mint-600" />
-            </div>
-            <h2 className="mt-4 text-lg font-bold text-slate-900">찾으시는 용어가 없어요</h2>
-            <p className="mt-1 text-sm text-slate-500">다른 키워드로 검색해 보거나 카테고리를 바꿔보세요.</p>
-            <button
-              onClick={() => { setQ(""); setCat("전체"); }}
-              className="mt-5 px-4 py-2 bg-mint-500 text-white rounded-xl text-sm font-semibold shadow-md hover:-translate-y-0.5 hover:shadow-lg active:scale-95 transition-all"
-            >
-              필터 초기화
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {filtered.map(t => (
-              <article
-                key={t.id}
-                className="group bg-surface rounded-3xl p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60"
+      {/* Card Grid */}
+      <main className="bg-canvas">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 pb-24">
+          {filtered.length === 0 ? (
+            <div className="py-20 text-center">
+              <h3 className="font-serif text-3xl tracking-[-0.02em] text-ink">
+                찾으시는 용어가 없어요.
+              </h3>
+              <p className="mt-3 text-body">다른 키워드로 검색해 보거나 카테고리를 바꿔보세요.</p>
+              <button
+                onClick={() => {
+                  setQ("");
+                  setCat("전체");
+                }}
+                className="mt-6 text-coral hover:text-coral-active text-[15px]"
               >
-                <span className="inline-block px-2.5 py-1 bg-mint-50 text-mint-700 text-[11px] font-semibold rounded-full">
-                  {t.category}
-                </span>
-                <h3 className="mt-3 text-lg font-bold text-slate-900 leading-snug">
-                  {t.name}
-                </h3>
-                <p className="mt-2 text-sm text-slate-600 leading-relaxed min-h-[60px]">
-                  {t.description}
-                </p>
-                <div className="mt-4">
-                  <Demo k={t.demoKey} />
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
+                필터 초기화 →
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map((t) => (
+                <article
+                  key={t.id}
+                  className="rounded-xl bg-surface-card p-7 flex flex-col gap-4 transition-colors hover:bg-surface-cream-strong"
+                >
+                  <div className="flex items-center gap-2">
+                    <SpikeMark className="w-3 h-3" fill="#cc785c" />
+                    <span className="text-[11px] uppercase tracking-[0.12em] font-medium text-mute">
+                      {t.category}
+                    </span>
+                  </div>
+                  <h3 className="font-serif text-[26px] leading-[1.15] tracking-[-0.02em] text-ink">
+                    {t.name}
+                  </h3>
+                  <p className="text-[14.5px] leading-relaxed text-body min-h-[60px]">
+                    {t.description}
+                  </p>
+                  <div className="mt-auto rounded-lg bg-canvas p-4 border border-hairline-soft">
+                    <Demo k={t.demoKey} />
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
 
+      {/* Coral CTA Band */}
+      <section id="cta" className="bg-canvas">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 pb-24">
+          <div className="rounded-xl bg-coral text-white p-12 sm:p-16">
+            <h2 className="font-serif text-[36px] sm:text-[44px] leading-[1.1] tracking-[-0.02em] max-w-2xl">
+              AI와 정확하게 대화할 준비, 끝났어요.
+            </h2>
+            <p className="mt-4 text-[16px] text-white/85 max-w-xl">
+              45개 용어를 머리에 넣었다면, 이제 AI에게 짧고 정확한 한 문장으로 화면을 그려달라고 말해보세요.
+            </p>
+            <a
+              href="#dictionary"
+              className="mt-8 inline-flex items-center gap-2 h-11 px-5 rounded-md bg-canvas text-ink text-sm font-medium hover:bg-white transition-colors"
+            >
+              사전으로 돌아가기 <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="border-t border-slate-100 bg-white/60">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 py-8 text-center text-xs text-slate-500">
-          총 <span className="font-bold text-mint-600">{TERMS.length}</span>개의 UI/UX 용어 ·
-          AI와 더 정확하게 대화하세요 ✨
+      <footer className="bg-surface-dark text-on-dark-soft">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 py-16">
+          <div className="flex items-center gap-2 text-on-dark">
+            <SpikeMark className="w-5 h-5" fill="#faf9f5" />
+            <span className="font-serif text-xl tracking-tight">Vibe UI/UX Dict</span>
+          </div>
+          <p className="mt-5 text-sm max-w-md leading-relaxed">
+            총 <span className="text-on-dark font-medium">{TERMS.length}</span>개의 UI/UX 용어 ·
+            바이브 코더가 AI와 정확하게 대화하도록 돕습니다.
+          </p>
+          <div className="mt-10 pt-8 border-t border-white/10 text-xs">
+            © {new Date().getFullYear()} Vibe UI/UX Dict. Inspired by Anthropic's editorial design language.
+          </div>
         </div>
       </footer>
     </div>
